@@ -6,7 +6,7 @@ class PostApiProvider {
   static const String _baseUrl = 'https://6603bb2b2393662c31cf8170.mockapi.io';
 
   static Future<List<Post>> fetchPosts() async {
-    final url = '$_baseUrl/id';
+    const url = '$_baseUrl/id';
 
     try {
       final response = await http.get(Uri.parse(url));

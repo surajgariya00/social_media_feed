@@ -4,15 +4,15 @@ class ReusableButton extends StatelessWidget {
   final String buttonText;
   final VoidCallback? onTap;
   final Color initialColor;
-  final Color textColor; // New parameter for text color
+  final Color textColor;
 
   const ReusableButton({
-    Key? key,
+    super.key,
     required this.buttonText,
     this.onTap,
     this.initialColor = const Color.fromARGB(255, 68, 97, 242),
-    this.textColor = Colors.white, // Default text color set to white
-  }) : super(key: key);
+    this.textColor = Colors.white,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ReusableButton extends StatelessWidget {
           child: Text(
             buttonText,
             style: TextStyle(
-              color: textColor, // Use textColor parameter for text color
+              color: textColor,
               fontWeight: FontWeight.w600,
               fontSize: 18,
             ),

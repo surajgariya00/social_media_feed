@@ -59,34 +59,6 @@ class OtpScreenState extends State<OtpScreen> {
     );
   }
 
-  Widget _buildOtpRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(
-        5,
-        (index) => Container(
-          width: 60.0,
-          height: 65,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.0),
-            border: Border.all(color: Colors.grey),
-          ),
-          child: TextField(
-            controller: otpControllers[index],
-            focusNode: _focusNodes[index],
-            maxLength: 1,
-            keyboardType: TextInputType.number,
-            textAlign: TextAlign.center,
-            decoration: const InputDecoration(
-              counterText: "",
-              border: InputBorder.none,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -100,48 +72,52 @@ class OtpScreenState extends State<OtpScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(),
-            const Center(
+            Center(
                 child: Pinput(
-              length: 6,
-              // Other properties...
-            )),
+                    length: 6,
+                    defaultPinTheme: PinTheme(
+                      width: 60,
+                      height: 60,
+                      textStyle: const TextStyle(
+                          fontSize: 20, color: Color.fromARGB(255, 40, 40, 40)),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 201, 201, 201),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 241, 241, 241)),
+                      ),
+                      constraints:
+                          const BoxConstraints(minWidth: 40, minHeight: 40),
+                    ))),
             const Spacer(),
             Center(
               child: SizedBox(
                 width: screenWidth * 0.9,
                 child: ReusableButton(
                   buttonText: 'Verify & Continue',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
-                      ),
-                    );
+                  onTap: () async {
+                    try {
+                      String otp = otpControllers.fold(
+                        '',
+                        (prev, controller) => prev += controller.text,
+                      );
+                      PhoneAuthCredential credential =
+                          PhoneAuthProvider.credential(
+                        verificationId: widget.verificationId,
+                        smsCode: otp,
+                      );
+                      await FirebaseAuth.instance
+                          .signInWithCredential(credential);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen(),
+                        ),
+                      );
+                    } catch (ex) {
+                      print(ex.toString());
+                    }
                   },
-                  // onTap: () async {
-                  //   try {
-                  //     String otp = otpControllers.fold(
-                  //       '',
-                  //       (prev, controller) => prev += controller.text,
-                  //     );
-                  //     PhoneAuthCredential credential =
-                  //         PhoneAuthProvider.credential(
-                  //       verificationId: widget.verificationId,
-                  //       smsCode: otp,
-                  //     );
-                  //     await FirebaseAuth.instance
-                  //         .signInWithCredential(credential);
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => HomeScreen(),
-                  //       ),
-                  //     );
-                  //   } catch (ex) {
-                  //     print(ex.toString());
-                  //   }
-                  // },
                 ),
               ),
             ),

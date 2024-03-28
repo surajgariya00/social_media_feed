@@ -5,7 +5,7 @@ import 'package:social_media_feed/Components/reusable_button.dart';
 import 'package:social_media_feed/Screens/otp_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   LoginScreenState createState() => LoginScreenState();
@@ -34,39 +34,27 @@ class LoginScreenState extends State<LoginScreen> {
                 width: screenWidth * 0.9,
                 child: ReusableButton(
                   buttonText: 'Send OTP',
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OtpScreen(
-                          verificationId: '12345',
-                          phoneNumber: phoneNumberController.text,
-                        ),
-                      ),
-                    );
+                  onTap: () async {
+                    String formattedPhoneNumber =
+                        '+91${phoneNumberController.text}';
+                    await FirebaseAuth.instance.verifyPhoneNumber(
+                        verificationCompleted:
+                            (PhoneAuthCredential credentials) {},
+                        verificationFailed: (FirebaseAuthException ex) {},
+                        codeSent: (String verificationid, int? resendtoken) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OtpScreen(
+                                verificationId: verificationid,
+                                phoneNumber: formattedPhoneNumber,
+                              ),
+                            ),
+                          );
+                        },
+                        codeAutoRetrievalTimeout: (String verificationId) {},
+                        phoneNumber: formattedPhoneNumber);
                   },
-                  // onTap: () async {
-                  //   String formattedPhoneNumber =
-                  //       '+91${phoneNumberController.text}';
-
-                  //   await FirebaseAuth.instance.verifyPhoneNumber(
-                  //       verificationCompleted:
-                  //           (PhoneAuthCredential credentials) {},
-                  //       verificationFailed: (FirebaseAuthException ex) {},
-                  //       codeSent: (String verificationid, int? resendtoken) {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => OtpScreen(
-                  //               verificationId: verificationid,
-                  //               phoneNumber: formattedPhoneNumber,
-                  //             ),
-                  //           ),
-                  //         );
-                  //       },
-                  //       codeAutoRetrievalTimeout: (String verificationId) {},
-                  //       phoneNumber: formattedPhoneNumber);
-                  // },
                 ),
               ),
             ),
@@ -82,17 +70,17 @@ class LoginScreenState extends State<LoginScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Login',
             style: TextStyle(fontSize: 38.0, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           PhoneNumberInputField(
             controller: phoneNumberController,
             errorText: phoneValidationError,
           ),
-          SizedBox(height: 16),
-          Text(
+          const SizedBox(height: 16),
+          const Text(
             'You will receive an SMS verification that may apply message and data rates.',
             style: TextStyle(
               color: Color.fromARGB(255, 101, 101, 101),

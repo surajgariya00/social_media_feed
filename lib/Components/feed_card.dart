@@ -7,19 +7,19 @@ import 'package:social_media_feed/Data/dummy_daata.dart';
 class AnimatedPostCard extends StatefulWidget {
   final Post post;
 
-  const AnimatedPostCard(this.post, {Key? key}) : super(key: key);
+  const AnimatedPostCard(this.post, {super.key});
 
   @override
-  _AnimatedPostCardState createState() => _AnimatedPostCardState();
+  AnimatedPostCardState createState() => AnimatedPostCardState();
 }
 
-class _AnimatedPostCardState extends State<AnimatedPostCard> {
+class AnimatedPostCardState extends State<AnimatedPostCard> {
   final TextEditingController _commentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       child: Card(
         key: ValueKey(widget.post.id),
         color: Colors.white,
@@ -29,8 +29,8 @@ class _AnimatedPostCardState extends State<AnimatedPostCard> {
           children: [
             ListTile(
               leading: CircleAvatar(
-                backgroundImage: CachedNetworkImageProvider(widget.post
-                    .userImageUrl), // Use CachedNetworkImageProvider for image caching
+                backgroundImage:
+                    CachedNetworkImageProvider(widget.post.userImageUrl),
               ),
               title: Text(
                 widget.post.username,
@@ -45,28 +45,22 @@ class _AnimatedPostCardState extends State<AnimatedPostCard> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Loading indicator
                   CircularProgressIndicator(
                     backgroundColor: Colors.blue[50],
                     strokeWidth: 2,
                   ),
-                  // Image with conditional visibility
                   Visibility(
                     visible: widget.post.imageUrl.isNotEmpty,
                     child: CachedNetworkImage(
-                      // Use CachedNetworkImage for image caching
                       imageUrl: widget.post.imageUrl,
-                      fit: BoxFit.cover, // Fill the container with the image
+                      fit: BoxFit.cover,
                       alignment: Alignment.center,
-                      errorWidget: (context, url, error) =>
-                          Container(), // Show nothing on error
+                      errorWidget: (context, url, error) => Container(),
                     ),
                   ),
                 ],
               ),
             ),
-
-            // Rest of your post content
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -95,10 +89,8 @@ class _AnimatedPostCardState extends State<AnimatedPostCard> {
                       ),
                       CupertinoButton(
                         padding: EdgeInsets.zero,
-                        child: Icon(CupertinoIcons.chat_bubble),
-                        onPressed: () {
-                          // Navigate to comments screen
-                        },
+                        child: const Icon(CupertinoIcons.chat_bubble),
+                        onPressed: () {},
                       ),
                     ],
                   ),
