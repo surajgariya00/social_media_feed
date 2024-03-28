@@ -8,10 +8,10 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   final faker = Faker();
 
   @override
@@ -24,12 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text(
           'Social Media Feed',
           style: TextStyle(
-            color: Color.fromARGB(255, 49, 45, 45), // Set text color
+            color: Color.fromARGB(255, 49, 45, 45),
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
         ),
-        centerTitle: true, // Center the title horizontally
+        centerTitle: true,
       ),
       body: FutureBuilder<List<Post>>(
         future: PostApiProvider.fetchPosts(),
